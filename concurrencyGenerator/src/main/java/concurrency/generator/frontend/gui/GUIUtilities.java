@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import concurrency.generator.frontend.flowchart.Flowchart;
 
 public class GUIUtilities {
@@ -16,6 +21,13 @@ public class GUIUtilities {
 		}
 		
 		return list;
+	}
+	
+	public static void showErrors(String errors) {
+		JOptionPane optionPane = new JOptionPane(errors, JOptionPane.ERROR_MESSAGE);    
+		JDialog dialog = optionPane.createDialog("Schemat posiada nastêpuj¹ce b³êdy");
+		dialog.setAlwaysOnTop(true);
+		dialog.setVisible(true);
 	}
 
 }

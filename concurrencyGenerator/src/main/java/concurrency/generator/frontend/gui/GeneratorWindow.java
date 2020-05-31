@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import concurrency.generator.frontend.algorithm.FlowchartAlgorithmStorage;
 import concurrency.generator.frontend.enums.AlgorithmEnum;
@@ -31,6 +29,7 @@ import concurrency.generator.frontend.flowchart.FlowchartBuilder;
 import concurrency.generator.frontend.flowchart.util.CoordinatesXY;
 import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
 import concurrency.generator.frontend.flowchart.util.TransportHelper;
+import concurrency.generator.frontend.validator.FlowValidator;
 
 public class GeneratorWindow extends JFrame {
 
@@ -239,10 +238,12 @@ public class GeneratorWindow extends JFrame {
 	
 	private void addStartButtonListerner() {
 		startButton.addActionListener((ActionEvent e) -> {
-			JDialog dialog = new JDialog(new JFrame(), "Not yet implemented", true);
-			dialog.setBounds(windowWidth, windowHeight, 200, 100);
-			dialog.add(new JLabel("Not yet implemented"));
-			dialog.setVisible(true);
+			FlowValidator flowValidator = new FlowValidator(flowchartMatrix);
+			flowValidator.validate();
+			if(flowValidator.hasErrors()) {
+				GUIUtilities.showErrors(flowValidator.getErrorsAsOneString());
+				return;
+			}
 		});
 	}
 	

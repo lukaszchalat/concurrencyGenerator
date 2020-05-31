@@ -60,4 +60,8 @@ public class Flowchart extends JLabel {
 	public boolean isNotEmpty() {
 		return ! type.equals(EMPTY);
 	}
+	
+	public boolean isConnector() {
+		return type.equals(CONNECTOR);
+	}
 }
