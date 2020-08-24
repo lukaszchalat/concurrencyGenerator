@@ -57,4 +57,7 @@ public class DecisionFlowchart extends Flowchart {
 		return rightVariable;
 	}
 
+	public JComboBox<String> getOptions() {
+		return options;
+	}
 }

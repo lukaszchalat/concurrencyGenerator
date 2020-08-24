@@ -34,7 +34,7 @@ public class FlowchartAlgorithmStorage {
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 500)).matrixCoordinates(new MatrixCoordinates(5, 5)).flowchartType(CONNECTOR).connectorType(BOTTOM).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 600)).matrixCoordinates(new MatrixCoordinates(6, 5)).flowchartType(ASSIGMENT).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 600)).matrixCoordinates(new MatrixCoordinates(6, 4)).flowchartType(CONNECTOR).connectorType(LEFT).build());	
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 600)).matrixCoordinates(new MatrixCoordinates(6, 3)).flowchartType(CONNECTOR).connectorType(TOP_LEFT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 600)).matrixCoordinates(new MatrixCoordinates(6, 3)).flowchartType(CONNECTOR).connectorType(TOP).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 500)).matrixCoordinates(new MatrixCoordinates(5, 3)).flowchartType(CONNECTOR).connectorType(TOP).build());
 	}
 

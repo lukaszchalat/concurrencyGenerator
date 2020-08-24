@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import concurrency.generator.backend.converter.CodeConverter;
 import concurrency.generator.frontend.algorithm.FlowchartAlgorithmStorage;
 import concurrency.generator.frontend.enums.AlgorithmEnum;
 import concurrency.generator.frontend.enums.ConnectorEnum;
@@ -244,6 +245,8 @@ public class GeneratorWindow extends JFrame {
 				GUIUtilities.showErrors(flowValidator.getErrorsAsOneString());
 				return;
 			}
+			
+			new CodeConverter(flowchartMatrix).convertToCodeElements();
 		});
 	}
 	

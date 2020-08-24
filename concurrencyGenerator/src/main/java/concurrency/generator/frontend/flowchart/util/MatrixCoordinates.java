@@ -6,7 +6,7 @@ public class MatrixCoordinates {
 	
 	private int row;
 	
-	public MatrixCoordinates(int column, int row) {
+	public MatrixCoordinates(int row, int column) {
 		this.column = column;
 		this.row = row;
 	}
@@ -51,6 +51,9 @@ public class MatrixCoordinates {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "MatrixCoordinates [column=" + column + ", row=" + row + "]";
+	}
 }
