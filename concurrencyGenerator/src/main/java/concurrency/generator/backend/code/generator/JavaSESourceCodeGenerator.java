@@ -17,6 +17,7 @@ import concurrency.generator.backend.code.CodeElement;
 import concurrency.generator.backend.code.ForLoopElement;
 import concurrency.generator.backend.code.OperationElement;
 import concurrency.generator.backend.code.OutputElement;
+import concurrency.generator.backend.code.WhileLoopElement;
 
 public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 	
@@ -45,6 +46,11 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 			}
 			else if(codeElement.getCodeElementType().equals(FOR_LOOP_ELEMENT)) {
 				ForLoopElement element = (ForLoopElement) codeElement;
+				String loopCode = generateLoopCode(element.getCodeElements());
+				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
+			}
+			else if(codeElement.getCodeElementType().equals(WHILE_LOOP_ELEMENT)) {
+				WhileLoopElement element = (WhileLoopElement) codeElement;
 				String loopCode = generateLoopCode(element.getCodeElements());
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
 			}

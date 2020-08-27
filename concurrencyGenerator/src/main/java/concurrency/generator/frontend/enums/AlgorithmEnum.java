@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 public enum AlgorithmEnum {
 	NONE(""),
-	FIBONACCI("Fibonacci");
+	FIBONACCI("Fibonacci"),
+	EUKLIDES("Euklides");
 	
 	private String name;
 	

@@ -53,7 +53,7 @@ public class CodeConverter {
 		}
 		else if(flowchart.getType().equals(DECISION)) {
 			if(checkIfLoop(flowchart)) {
-				codeElements.add(convertToLoop(getLoopFlowcharts(flowchart)));
+				codeElements.add(convertToForLoop(getLoopFlowcharts(flowchart)));
 			}
 		}
 		else if(flowchart.getType().equals(OPERATION)) {
@@ -79,8 +79,7 @@ public class CodeConverter {
 		return elements;
 	}
 	
-	private CodeElement convertToLoop(List<Flowchart> loopFlowcharts) {
-		ForLoopElement forLoop = new ForLoopElement();
+	private CodeElement convertToForLoop(List<Flowchart> loopFlowcharts) {
 		
 		DecisionFlowchart decisionFlowchart = (DecisionFlowchart) loopFlowcharts.stream().filter(flowchart -> flowchart.getType().equals(DECISION)).findAny().get();
 		
@@ -96,26 +95,45 @@ public class CodeConverter {
 		
 		OperationFlowchart iteratorOperationFlowchart = (OperationFlowchart) loopFlowcharts.stream().filter(flowchart -> flowchart.getType().equals(OPERATION))
 				                                                                                    .filter(flowchart -> ((OperationFlowchart) flowchart).getAssigmentVariable().getText().equals(iteratorName))
-				                                                                                    .findAny().get();
+				                                                                                    .findAny().orElse(null);
 		
-		String iteratorChangeSign = iteratorOperationFlowchart.getOperations().getSelectedItem().toString();
-		String iteratorChangeValue = iteratorOperationFlowchart.getSecondVariable().getText();
-		
-		forLoop.setIteratorName(iteratorName);
-		forLoop.setIteratorStartValue(iteratorStartValue);
-		forLoop.setConditionSign(conditionSign);
-		forLoop.setConditionValue(conditionValue);
-		forLoop.setIteratorChangeSign(iteratorChangeSign);
-		forLoop.setIteratorChangeValue(iteratorChangeValue);
-		
-		loopFlowcharts.remove(decisionFlowchart);
-		loopFlowcharts.remove(iteratorOperationFlowchart);
-		
-		for(Flowchart flowchart: loopFlowcharts) {
-			convert(flowchart, forLoop.getCodeElements());
+		if(iteratorOperationFlowchart != null) {
+			ForLoopElement forLoop = new ForLoopElement();
+			
+			String iteratorChangeSign = iteratorOperationFlowchart.getOperations().getSelectedItem().toString();
+			String iteratorChangeValue = iteratorOperationFlowchart.getSecondVariable().getText();
+			
+			forLoop.setIteratorName(iteratorName);
+			forLoop.setIteratorStartValue(iteratorStartValue);
+			forLoop.setConditionSign(conditionSign);
+			forLoop.setConditionValue(conditionValue);
+			forLoop.setIteratorChangeSign(iteratorChangeSign);
+			forLoop.setIteratorChangeValue(iteratorChangeValue);
+			
+			loopFlowcharts.remove(decisionFlowchart);
+			loopFlowcharts.remove(iteratorOperationFlowchart);
+			
+			for(Flowchart flowchart: loopFlowcharts) {
+				convert(flowchart, forLoop.getCodeElements());
+			}
+			
+			return forLoop;
 		}
-		
-		return forLoop;
+		else {
+			WhileLoopElement whileLoop = new WhileLoopElement();
+			
+			whileLoop.setLeftConditionVariable(iteratorName);
+			whileLoop.setRightConditionVariable(conditionValue);
+			whileLoop.setConditionSign(conditionSign);
+			
+			loopFlowcharts.remove(decisionFlowchart);
+			
+			for(Flowchart flowchart: loopFlowcharts) {
+				convert(flowchart, whileLoop.getCodeElements());
+			}
+			
+			return whileLoop;
+		}
 	}
 	
 	private CodeElement convertToOperationElement(Flowchart flowchart) {

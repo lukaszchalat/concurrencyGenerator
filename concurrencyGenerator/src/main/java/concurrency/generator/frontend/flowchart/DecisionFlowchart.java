@@ -35,7 +35,7 @@ public class DecisionFlowchart extends Flowchart {
 		rightVariable = new JTextField();
 		rightVariable.setBounds(35, 75, INPUT_TEXT_WIDTH, INPUT_TEXT_HEIGHT);
 		
-		String optionsValues[] = {">", "<", "==", "!="};
+		String optionsValues[] = {">", "<", ">=", "<=", "==", "!=", "%"};
 		
 		options = new JComboBox<String>(optionsValues);
 		options.setBounds(30, 50, COMBO_BOX_WIDTH, COMBO_BOX_HEIGHT);
