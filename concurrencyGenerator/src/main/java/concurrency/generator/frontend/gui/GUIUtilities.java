@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import concurrency.generator.frontend.flowchart.Flowchart;

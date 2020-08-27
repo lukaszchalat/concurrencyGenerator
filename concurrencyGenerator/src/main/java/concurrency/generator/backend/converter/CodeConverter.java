@@ -9,13 +9,12 @@ import java.util.stream.Collectors;
 
 import javax.swing.JTextField;
 
-import concurrency.generator.backend.code.AssigmentElement;
-import concurrency.generator.backend.code.CodeElement;
-import concurrency.generator.backend.code.ForLoopElement;
+import concurrency.generator.backend.code.*;
 import concurrency.generator.frontend.flowchart.AssigmentFlowchart;
 import concurrency.generator.frontend.flowchart.DecisionFlowchart;
 import concurrency.generator.frontend.flowchart.Flowchart;
 import concurrency.generator.frontend.flowchart.OperationFlowchart;
+import concurrency.generator.frontend.flowchart.OutputFlowchart;
 import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
 
 public class CodeConverter {
@@ -43,20 +42,27 @@ public class CodeConverter {
 			currentFlowchart = currentFlowchart.getType().equals(DECISION) && checkIfLoop(currentFlowchart) ? flowchartFinder.goLeft(currentFlowchart) 
 					                                                                                        : flowchartFinder.findNextFlowchart(currentFlowchart);
 		}
-		
+	
 		return codeElements;
 	}
 	
 	private void convert(Flowchart flowchart, List<CodeElement> codeElements) {
+		
 		if(flowchart.getType().equals(ASSIGMENT)) {
 			codeElements.addAll(convertToAssigmentElements(flowchart));
 		}
-		
-		if(flowchart.getType().equals(DECISION)) {
+		else if(flowchart.getType().equals(DECISION)) {
 			if(checkIfLoop(flowchart)) {
 				codeElements.add(convertToLoop(getLoopFlowcharts(flowchart)));
 			}
 		}
+		else if(flowchart.getType().equals(OPERATION)) {
+			codeElements.add(convertToOperationElement(flowchart));
+		}
+		else if(flowchart.getType().equals(OUTPUT)) {
+			codeElements.add(convertToOutputElement(flowchart));
+		}
+		
 	}
 	
 	private List<CodeElement> convertToAssigmentElements(Flowchart flowchart) {
@@ -110,6 +116,23 @@ public class CodeConverter {
 		}
 		
 		return forLoop;
+	}
+	
+	private CodeElement convertToOperationElement(Flowchart flowchart) {
+		OperationFlowchart operationFlowchart = (OperationFlowchart) flowchart;
+		
+		String assigmentValue = operationFlowchart.getAssigmentVariable().getText();
+		String firstVariable = operationFlowchart.getFirstVariable().getText();
+		String secondVariable = operationFlowchart.getSecondVariable().getText();
+		String operation = operationFlowchart.getOperations().getSelectedItem().toString();
+		
+		return new OperationElement(assigmentValue, firstVariable, secondVariable, operation);
+	}
+	
+	private CodeElement convertToOutputElement(Flowchart flowchart) {
+		String output = ((OutputFlowchart) flowchart).getOutputVariable().getText();
+		
+		return new OutputElement(output);
 	}
 	
 	private boolean checkIfLoop(Flowchart flowchart) {

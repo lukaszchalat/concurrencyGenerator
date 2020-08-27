@@ -1,7 +1,6 @@
 package concurrency.generator.frontend.gui;
 
 import static concurrency.generator.frontend.configuration.ConfigurationValues.*;
-import static concurrency.generator.frontend.enums.AlgorithmEnum.FIBONACCI;
 import static concurrency.generator.frontend.enums.FlowchartEnum.CONNECTOR;
 import static concurrency.generator.frontend.enums.FlowchartEnum.EMPTY;
 
@@ -12,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +19,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
+import concurrency.generator.backend.code.CodeElement;
+import concurrency.generator.backend.code.generator.SourceCodeGeneratorController;
 import concurrency.generator.backend.converter.CodeConverter;
 import concurrency.generator.frontend.algorithm.FlowchartAlgorithmStorage;
-import concurrency.generator.frontend.enums.AlgorithmEnum;
 import concurrency.generator.frontend.enums.ConnectorEnum;
 import concurrency.generator.frontend.enums.FlowchartEnum;
 import concurrency.generator.frontend.flowchart.Connector;
@@ -246,34 +247,40 @@ public class GeneratorWindow extends JFrame {
 				return;
 			}
 			
-			new CodeConverter(flowchartMatrix).convertToCodeElements();
+			String selectedJavaTechnology = technologyDropdown.getSelectedItem().toString();
+			String selectedAlgorithm = algorithmDropdown.getSelectedItem().toString();
+			
+			List<CodeElement> codeElements = new CodeConverter(flowchartMatrix).convertToCodeElements();
+			
+			try {
+				SourceCodeGeneratorController.generateSourceCode(codeElements, selectedJavaTechnology, selectedAlgorithm);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		});
 	}
 	
 	private void addAlgorithmDropdownListener() {
 		algorithmDropdown.addActionListener((ActionEvent e) -> {
 			@SuppressWarnings("unchecked")
-			String name = ((JComboBox<String>) e.getSource()).getSelectedItem().toString();
-			AlgorithmEnum algorithmEnum = AlgorithmEnum.getByName(name);
-			
-			if(algorithmEnum.equals(FIBONACCI)) {
-				List<Flowchart> fibonacciFlowcharts = FlowchartAlgorithmStorage.getFibonacciAlgorithm();
-				clearFlowchartMatrix();
+			String selectedAlgorithm = ((JComboBox<String>) e.getSource()).getSelectedItem().toString();
+			List<Flowchart> selectedAgorithmFlowcharts = FlowchartAlgorithmStorage.getAlgorithm(selectedAlgorithm);
 				
-				for(Flowchart flowchart : fibonacciFlowcharts) {
-					Flowchart matrixFlowchart = flowchartMatrix.stream().filter(flow -> flow.getCoordinates().equals(flowchart.getCoordinates())).findFirst().orElse(null);
-					panel.remove(matrixFlowchart);
-					int index = flowchartMatrix.indexOf(matrixFlowchart);
-					flowchartMatrix.set(index, flowchart);
-					flowchart.setBackground(Color.YELLOW);
-					flowchart.setOpaque(true);
-					flowchart.addMouseListener(mouseListener);
-					panel.add(flowchart);
-				}
+			clearFlowchartMatrix();
 				
-				panel.revalidate();
-				panel.repaint();
+			for(Flowchart flowchart : selectedAgorithmFlowcharts) {
+				Flowchart matrixFlowchart = flowchartMatrix.stream().filter(flow -> flow.getCoordinates().equals(flowchart.getCoordinates())).findFirst().orElse(null);
+				panel.remove(matrixFlowchart);
+				int index = flowchartMatrix.indexOf(matrixFlowchart);
+				flowchartMatrix.set(index, flowchart);
+				flowchart.setBackground(Color.YELLOW);
+				flowchart.setOpaque(true);
+				flowchart.addMouseListener(mouseListener);
+				panel.add(flowchart);
 			}
+				
+			panel.revalidate();
+			panel.repaint();
 		});
 	}
 	

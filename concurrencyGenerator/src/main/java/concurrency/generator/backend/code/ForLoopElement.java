@@ -62,4 +62,23 @@ public class ForLoopElement extends CodeElement {
 	public void setIteratorChangeValue(String iteratorChangeValue) {
 		this.iteratorChangeValue = iteratorChangeValue;
 	}
+	
+	public String toString() {
+		StringBuilder forLoop = new StringBuilder();
+		
+		forLoop.append("\nfor(int ")
+		       .append(iteratorName + " = ")
+		       .append(iteratorStartValue + "; ")
+		       .append(iteratorName + " ")
+		       .append(conditionSign + " ")
+		       .append(conditionValue + "; ")
+		       .append(iteratorName + " = ")
+		       .append(iteratorName + " ")
+		       .append(iteratorChangeSign + " ")
+		       .append(iteratorChangeValue + ") {\n")
+		       .append("%loopCode%\n")
+		       .append("}\n");
+	
+		return forLoop.toString();
+	}
 }

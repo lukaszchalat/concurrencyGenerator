@@ -21,4 +21,13 @@ public class AssigmentElement extends CodeElement {
 	public String getVariableValue() {
 		return variableValue;
 	}
+	
+	public String toString() {
+		StringBuilder assigment = new StringBuilder();
+		
+		assigment.append(variableName + " = ")
+		         .append(variableValue + ";\n");
+		
+		return assigment.toString();
+	}
 }
