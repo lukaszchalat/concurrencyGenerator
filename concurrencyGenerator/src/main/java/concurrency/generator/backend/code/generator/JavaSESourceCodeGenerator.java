@@ -15,14 +15,15 @@ import com.squareup.javapoet.TypeSpec;
 import concurrency.generator.backend.code.AssigmentElement;
 import concurrency.generator.backend.code.CodeElement;
 import concurrency.generator.backend.code.ForLoopElement;
-import concurrency.generator.backend.code.OperationElement;
 import concurrency.generator.backend.code.OutputElement;
 import concurrency.generator.backend.code.WhileLoopElement;
 
 public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 	
-	ClassName executorService = ClassName.get("java.util.concurrent", "ExecutorService");
-	ClassName executors = ClassName.get("java.util.concurrent", "Executors");
+	private final ClassName executorService = ClassName.get("java.util.concurrent", "ExecutorService");
+	private final ClassName executors = ClassName.get("java.util.concurrent", "Executors");
+	private final String JAVA_SE_EXECUTOR_STRING = "executorService.execute(task);";
+	
 	
 	public JavaSESourceCodeGenerator(String className) {
 		super(className);
@@ -46,12 +47,12 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 			}
 			else if(codeElement.getCodeElementType().equals(FOR_LOOP_ELEMENT)) {
 				ForLoopElement element = (ForLoopElement) codeElement;
-				String loopCode = generateLoopCode(element.getCodeElements());
+				String loopCode = generateLoopCode(element.getCodeElements(), JAVA_SE_EXECUTOR_STRING);
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
 			}
 			else if(codeElement.getCodeElementType().equals(WHILE_LOOP_ELEMENT)) {
 				WhileLoopElement element = (WhileLoopElement) codeElement;
-				String loopCode = generateLoopCode(element.getCodeElements());
+				String loopCode = generateLoopCode(element.getCodeElements(), JAVA_SE_EXECUTOR_STRING);
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
 			}
 			else if(codeElement.getCodeElementType().equals(OUTPUT_ELEMENT)) {
@@ -68,25 +69,5 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
                 .build();
 		
 		return createMainTemplateClass(fields, mainMethod);
-	}
-	
-	private String generateLoopCode(List<CodeElement> codeElements) {
-		StringBuilder loopCode = new StringBuilder();
-		
-		loopCode.append("\tRunnable task = () -> {\n");
-		
-		for(CodeElement codeElement: codeElements) {
-			if(codeElement.getCodeElementType().equals(OPERATION_ELEMENT)) {
-				loopCode.append("\t\t").append(((OperationElement) codeElement).toString());
-			}
-			else if(codeElement.getCodeElementType().equals(ASSIGMENT_ELEMENT)) {
-				loopCode.append("\t\t").append(((AssigmentElement) codeElement).toString());
-			}
-		}
-		
-		loopCode.append("  };\n");
-		loopCode.append("executorService.execute(task);");
-		
-		return loopCode.toString();
 	}
 }
