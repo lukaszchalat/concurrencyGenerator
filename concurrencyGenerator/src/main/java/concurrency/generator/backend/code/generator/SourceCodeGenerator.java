@@ -9,6 +9,7 @@ import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import concurrency.generator.backend.code.AssigmentElement;
@@ -17,23 +18,24 @@ import concurrency.generator.backend.code.OperationElement;
 
 public abstract class SourceCodeGenerator {
 	
-	protected TypeSpec mainTemplateClass;
-	
 	protected String className;
 	
 	public SourceCodeGenerator(String className) {
 		this.className = className;
 	}
 	
-	protected TypeSpec createMainTemplateClass(List<FieldSpec> fields, MethodSpec mainMethod) {
+	protected TypeSpec createMainTemplateClass(List<FieldSpec> fields, MethodSpec mainMethod, TypeName superClass) {
 	
-		mainTemplateClass = TypeSpec.classBuilder(className)
-				                    .addModifiers(Modifier.PUBLIC)
-				                    .addMethod(mainMethod)
-				                    .addFields(fields)
-				                    .build();
+		TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
+				                                .addModifiers(Modifier.PUBLIC)
+				                                .addMethod(mainMethod)
+				                                .addFields(fields);
 		
-		return mainTemplateClass;
+		if(superClass != null) {
+			classBuilder.superclass(superClass);
+		}
+		
+		return classBuilder.build();
 	}
 	
 	public abstract TypeSpec generateSourceCode(List<CodeElement> codeElements);
@@ -53,7 +55,7 @@ public abstract class SourceCodeGenerator {
 		}
 		
 		loopCode.append("  };\n");
-		loopCode.append("executorService.execute(task);");
+		loopCode.append(executor);
 		
 		return loopCode.toString();
 	}

@@ -68,6 +68,6 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
                 .addCode(codeBlock.toString())
                 .build();
 		
-		return createMainTemplateClass(fields, mainMethod);
+		return createMainTemplateClass(fields, mainMethod, null);
 	}
 }
