@@ -34,7 +34,7 @@ public class CodeConverter {
 		Flowchart currentFlowchart = flowchartFinder.findStartFlowchart();
 		
 		while(!currentFlowchart.getType().equals(STOP)) {
-			System.out.println(currentFlowchart.getType());
+
 			if(!currentFlowchart.isConnector()) {
 				convert(currentFlowchart, codeElements);
 			}	

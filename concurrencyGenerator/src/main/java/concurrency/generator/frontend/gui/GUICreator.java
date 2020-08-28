@@ -4,11 +4,13 @@ import static concurrency.generator.frontend.configuration.ConfigurationValues.*
 import static concurrency.generator.frontend.enums.ConnectorEnum.*;
 import static concurrency.generator.frontend.enums.FlowchartEnum.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
 import concurrency.generator.frontend.enums.AlgorithmEnum;
@@ -126,5 +128,28 @@ public class GUICreator {
 		startButton.setBounds(825, 200, 100, 25);
 		
 		return startButton;
+	}
+	
+	public static JButton createFileChooserButton() {
+		JButton fileChooserButton = new JButton("Choose target directory");
+		fileChooserButton.setBounds(825, 100, 225, 25);
+		
+		return fileChooserButton;
+	}
+	
+	public static JFileChooser createFileChooser() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File("."));
+		fileChooser.setDialogTitle("Choose target directory for generated code");
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		return fileChooser;
+	}
+	
+	public static JLabel createChoosenDirectoryLabel() {
+		JLabel choosenDirectoryLabel = new JLabel("Selected directory:", JLabel.LEFT);
+		choosenDirectoryLabel.setBounds(825, 150, 400, LABEL_DROPDOWN_HEIGHT);
+		
+		return choosenDirectoryLabel;
 	}
 }

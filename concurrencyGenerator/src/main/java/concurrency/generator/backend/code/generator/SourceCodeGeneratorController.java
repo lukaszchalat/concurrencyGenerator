@@ -1,6 +1,7 @@
 package concurrency.generator.backend.code.generator;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.squareup.javapoet.JavaFile;
@@ -10,7 +11,7 @@ import concurrency.generator.backend.code.CodeElement;
 
 public class SourceCodeGeneratorController {
 	
-	public static void generateSourceCode(List<CodeElement> codeElements, String javaTechnology, String algorithm) throws IOException {
+	public static void generateSourceCode(List<CodeElement> codeElements, String javaTechnology, String algorithm, String targetDirectory) throws IOException {
 		
 		TypeSpec generatedSourceClass;
 		String className = createClassName(javaTechnology, algorithm);
@@ -28,9 +29,9 @@ public class SourceCodeGeneratorController {
 			throw new UnsupportedOperationException("Unsupported Java Technology " + javaTechnology);
 		}
 		
-		JavaFile javaFile = JavaFile.builder("concurrency.generator.backend.code.source", generatedSourceClass).build();
+		JavaFile javaFile = JavaFile.builder("", generatedSourceClass).build();
 		
-		javaFile.writeTo(System.out);
+		javaFile.writeTo(Paths.get(targetDirectory));
 	}
 	
 	private static String createClassName(String javaTechnology, String algorithm) {

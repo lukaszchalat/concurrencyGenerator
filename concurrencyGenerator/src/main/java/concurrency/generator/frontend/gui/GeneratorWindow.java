@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import concurrency.generator.backend.code.CodeElement;
 import concurrency.generator.backend.code.generator.SourceCodeGeneratorController;
@@ -50,6 +52,9 @@ public class GeneratorWindow extends JFrame {
 	private JButton clearAllButton; 
 	private JButton clearButton;
 	private JButton startButton;
+	private JButton fileChooserButton;
+	private JFileChooser fileChooser;
+	private JLabel choosenDirectoryLabel;
 	private Connector connectorFlowchart;
 	private Flowchart selectedMatrixFlowchart;
 	private List<Flowchart> flowchartMatrix;
@@ -103,6 +108,13 @@ public class GeneratorWindow extends JFrame {
 		startButton = GUICreator.createStartButton();
 		panel.add(startButton);
 		
+		// create and add file chooser components
+		fileChooserButton = GUICreator.createFileChooserButton();
+		panel.add(fileChooserButton);
+		fileChooser = GUICreator.createFileChooser();
+		choosenDirectoryLabel = GUICreator.createChoosenDirectoryLabel();
+		panel.add(choosenDirectoryLabel);
+		
 		// create and add listeners
 		setMouseListener();
 		addMouseListeners();
@@ -111,6 +123,7 @@ public class GeneratorWindow extends JFrame {
 		addClearAllButtonListener();
 		addClearButtonListener();
 		addStartButtonListerner();
+		addFileChooserButtonListener();
 		
 		this.add(panel);
 	}
@@ -252,8 +265,10 @@ public class GeneratorWindow extends JFrame {
 			
 			List<CodeElement> codeElements = new CodeConverter(flowchartMatrix).convertToCodeElements();
 			
+			String targetDirectory = fileChooser.getSelectedFile().getPath();
+			
 			try {
-				SourceCodeGeneratorController.generateSourceCode(codeElements, selectedJavaTechnology, selectedAlgorithm);
+				SourceCodeGeneratorController.generateSourceCode(codeElements, selectedJavaTechnology, selectedAlgorithm, targetDirectory);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -281,6 +296,15 @@ public class GeneratorWindow extends JFrame {
 				
 			panel.revalidate();
 			panel.repaint();
+		});
+	}
+	
+	private void addFileChooserButtonListener() {
+		fileChooserButton.addActionListener((ActionEvent e) -> {
+			if(fileChooser.showOpenDialog(fileChooserButton) == JFileChooser.APPROVE_OPTION) {
+				String directoryPath = fileChooser.getSelectedFile().getAbsolutePath();
+				choosenDirectoryLabel.setText("Selected directory: " + directoryPath);
+			}
 		});
 	}
 	
