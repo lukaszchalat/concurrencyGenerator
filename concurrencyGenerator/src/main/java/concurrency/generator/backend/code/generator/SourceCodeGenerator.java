@@ -1,7 +1,10 @@
 package concurrency.generator.backend.code.generator;
 
 import static concurrency.generator.backend.enums.CodeElementEnum.ASSIGMENT_ELEMENT;
+import static concurrency.generator.backend.enums.CodeElementEnum.FOR_LOOP_ELEMENT;
 import static concurrency.generator.backend.enums.CodeElementEnum.OPERATION_ELEMENT;
+import static concurrency.generator.backend.enums.CodeElementEnum.OUTPUT_ELEMENT;
+import static concurrency.generator.backend.enums.CodeElementEnum.WHILE_LOOP_ELEMENT;
 
 import java.util.List;
 
@@ -14,7 +17,10 @@ import com.squareup.javapoet.TypeSpec;
 
 import concurrency.generator.backend.code.AssigmentElement;
 import concurrency.generator.backend.code.CodeElement;
+import concurrency.generator.backend.code.ForLoopElement;
 import concurrency.generator.backend.code.OperationElement;
+import concurrency.generator.backend.code.OutputElement;
+import concurrency.generator.backend.code.WhileLoopElement;
 
 public abstract class SourceCodeGenerator {
 	
@@ -58,5 +64,33 @@ public abstract class SourceCodeGenerator {
 		loopCode.append(executor);
 		
 		return loopCode.toString();
+	}
+	
+	protected void generateFieldsAndCodeBlock(List<CodeElement> codeElements, List<FieldSpec> fields, StringBuilder codeBlock, String executor) {
+		
+		for(CodeElement codeElement: codeElements) {
+			if(codeElement.getCodeElementType().equals(ASSIGMENT_ELEMENT) && !((AssigmentElement) codeElement).getVariableName().equals("i")) {
+				AssigmentElement element = (AssigmentElement) codeElement;
+				FieldSpec field = FieldSpec.builder(Integer.class, element.getVariableName())
+						                   .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE, Modifier.STATIC)
+						                   .build();
+				
+				fields.add(field);
+				codeBlock.append(((AssigmentElement) codeElement).toString());
+			}
+			else if(codeElement.getCodeElementType().equals(FOR_LOOP_ELEMENT)) {
+				ForLoopElement element = (ForLoopElement) codeElement;
+				String loopCode = generateLoopCode(element.getCodeElements(), executor);
+				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
+			}
+			else if(codeElement.getCodeElementType().equals(WHILE_LOOP_ELEMENT)) {
+				WhileLoopElement element = (WhileLoopElement) codeElement;
+				String loopCode = generateLoopCode(element.getCodeElements(), executor);
+				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
+			}
+			else if(codeElement.getCodeElementType().equals(OUTPUT_ELEMENT)) {
+				codeBlock.append(((OutputElement) codeElement).toString());
+			}
+		}
 	}
 }
