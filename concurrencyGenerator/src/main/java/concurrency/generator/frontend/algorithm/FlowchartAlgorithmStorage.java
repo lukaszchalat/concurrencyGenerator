@@ -39,11 +39,18 @@ public class FlowchartAlgorithmStorage {
 	private static void setFibonacciAlgorithm() {
 		fibonacciAlgorithm = new ArrayList<>();
 		
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 0)).matrixCoordinates(new MatrixCoordinates(0, 3)).flowchartType(START).build());
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 100)).matrixCoordinates(new MatrixCoordinates(1, 3)).flowchartType(CONNECTOR).connectorType(BOTTOM).build());
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 200)).matrixCoordinates(new MatrixCoordinates(2, 3)).flowchartType(ASSIGMENT).build());
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 200)).matrixCoordinates(new MatrixCoordinates(2, 4)).flowchartType(CONNECTOR).connectorType(RIGHT).build());
-		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 200)).matrixCoordinates(new MatrixCoordinates(2, 5)).flowchartType(ASSIGMENT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(0, 0)).matrixCoordinates(new MatrixCoordinates(0, 0)).flowchartType(START).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(100, 0)).matrixCoordinates(new MatrixCoordinates(0, 1)).flowchartType(CONNECTOR).connectorType(RIGHT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(200, 0)).matrixCoordinates(new MatrixCoordinates(0, 2)).flowchartType(ASSIGMENT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 0)).matrixCoordinates(new MatrixCoordinates(0, 3)).flowchartType(CONNECTOR).connectorType(RIGHT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 0)).matrixCoordinates(new MatrixCoordinates(0, 4)).flowchartType(ASSIGMENT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 100)).matrixCoordinates(new MatrixCoordinates(1, 4)).flowchartType(CONNECTOR).connectorType(BOTTOM).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 200)).matrixCoordinates(new MatrixCoordinates(2, 4)).flowchartType(DECISION).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(300, 200)).matrixCoordinates(new MatrixCoordinates(2, 3)).flowchartType(CONNECTOR).connectorType(LEFT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(200, 200)).matrixCoordinates(new MatrixCoordinates(2, 2)).flowchartType(OUTPUT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(100, 200)).matrixCoordinates(new MatrixCoordinates(2, 1)).flowchartType(CONNECTOR).connectorType(LEFT).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(0, 200)).matrixCoordinates(new MatrixCoordinates(2, 0)).flowchartType(STOP).build());
+		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 200)).matrixCoordinates(new MatrixCoordinates(2, 5)).flowchartType(CONNECTOR).connectorType(BOTTOM).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 300)).matrixCoordinates(new MatrixCoordinates(3, 5)).flowchartType(CONNECTOR).connectorType(BOTTOM).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(500, 400)).matrixCoordinates(new MatrixCoordinates(4, 5)).flowchartType(DECISION).build());
 		fibonacciAlgorithm.add(new FlowchartBuilder().coordinatesXY(new CoordinatesXY(400, 400)).matrixCoordinates(new MatrixCoordinates(4, 4)).flowchartType(CONNECTOR).connectorType(LEFT).build());

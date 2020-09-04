@@ -17,7 +17,6 @@ import concurrency.generator.backend.code.CodeElement;
 public class SpringSourceCodeGenerator extends SourceCodeGenerator {
 	
 	private final ClassName autowired = ClassName.get("org.springframework.beans.factory.annotation", "Autowired");
-	private final String SPRING_EXECUTOR_STRING = "taskExecutor.execute(task);";
 
 	public SpringSourceCodeGenerator(String className) {
 		super(className);

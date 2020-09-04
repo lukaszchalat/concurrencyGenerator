@@ -16,8 +16,8 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 	
 	private final ClassName executorService = ClassName.get("java.util.concurrent", "ExecutorService");
 	private final ClassName executors = ClassName.get("java.util.concurrent", "Executors");
-	private final String JAVA_SE_EXECUTOR_STRING = "executorService.execute(task);";
-	
+	private final ClassName lock = ClassName.get("java.util.concurrent.locks", "Lock");
+	private final ClassName reentrantLock = ClassName.get("java.util.concurrent.locks", "ReentrantLock");
 	
 	public JavaSESourceCodeGenerator(String className) {
 		super(className);
@@ -36,6 +36,7 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
                 .returns(void.class)
                 .addParameter(String[].class, "args")
                 .addStatement("$T executorService = $T.newFixedThreadPool(5)", executorService, executors)
+                .addStatement("$T lock = new $T()", lock, reentrantLock)
                 .addCode(codeBlock.toString())
                 .build();
 		

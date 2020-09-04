@@ -15,54 +15,63 @@ import concurrency.generator.frontend.flowchart.DecisionFlowchart;
 import concurrency.generator.frontend.flowchart.Flowchart;
 import concurrency.generator.frontend.flowchart.OperationFlowchart;
 import concurrency.generator.frontend.flowchart.OutputFlowchart;
-import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
 
 public class CodeConverter {
 	
-	private List<CodeElement> codeElements;
 	private List<Flowchart> flowcharts;
 	private FlowchartFinder flowchartFinder;
+	private Flowchart loopStartFlowchart;
+	private List<CodeElement> cachedAssigmentElements;
+	private boolean isLoop;
 	
 	public CodeConverter(List<Flowchart> flowcharts) {
 		this.flowcharts = flowcharts.stream().filter(flowchart -> flowchart.isNotEmpty()).collect(Collectors.toList());
 		this.flowchartFinder = new FlowchartFinder(this.flowcharts);
-		this.codeElements = new ArrayList<>();
+		this.cachedAssigmentElements = new ArrayList<>();
 	}
 	
 	public List<CodeElement> convertToCodeElements() {
-		
 		Flowchart currentFlowchart = flowchartFinder.findStartFlowchart();
 		
+		return convertToCodeElements(currentFlowchart);
+	}
+	
+	private List<CodeElement> convertToCodeElements(Flowchart currentFlowchart) {
+		
+		List<CodeElement> codeElements = new ArrayList<>();
+		
 		while(!currentFlowchart.getType().equals(STOP)) {
-
-			if(!currentFlowchart.isConnector()) {
-				convert(currentFlowchart, codeElements);
-			}	
 			
-			currentFlowchart = currentFlowchart.getType().equals(DECISION) && checkIfLoop(currentFlowchart) ? flowchartFinder.goLeft(currentFlowchart) 
+			if(isLoop && currentFlowchart.equals(loopStartFlowchart)) break;
+
+			if(currentFlowchart.getType().equals(ASSIGMENT)) {
+				codeElements.addAll(convertToAssigmentElements(currentFlowchart));
+			} 
+			else if(currentFlowchart.getType().equals(OPERATION)) {
+				codeElements.add(convertToOperationElement(currentFlowchart));
+			}
+			else if(currentFlowchart.getType().equals(OUTPUT)) {
+				codeElements.add(convertToOutputElement(currentFlowchart));
+			}
+			else if(currentFlowchart.getType().equals(DECISION)) {
+				
+				if(!checkIfLoop(currentFlowchart)) {
+					codeElements.add(convertToIfElseElement(currentFlowchart));
+					break;
+				}
+				else {
+					isLoop = true;
+					codeElements.add(convertToLoop(currentFlowchart));
+					isLoop = false;
+				}
+				
+			}
+			
+			currentFlowchart = currentFlowchart.getType().equals(DECISION) && checkIfLoop(currentFlowchart) ? flowchartFinder.goLeft(currentFlowchart)
 					                                                                                        : flowchartFinder.findNextFlowchart(currentFlowchart);
 		}
 	
 		return codeElements;
-	}
-	
-	private void convert(Flowchart flowchart, List<CodeElement> codeElements) {
-		
-		if(flowchart.getType().equals(ASSIGMENT)) {
-			codeElements.addAll(convertToAssigmentElements(flowchart));
-		}
-		else if(flowchart.getType().equals(DECISION)) {
-			if(checkIfLoop(flowchart)) {
-				codeElements.add(convertToForLoop(getLoopFlowcharts(flowchart)));
-			}
-		}
-		else if(flowchart.getType().equals(OPERATION)) {
-			codeElements.add(convertToOperationElement(flowchart));
-		}
-		else if(flowchart.getType().equals(OUTPUT)) {
-			codeElements.add(convertToOutputElement(flowchart));
-		}
-		
 	}
 	
 	private List<CodeElement> convertToAssigmentElements(Flowchart flowchart) {
@@ -76,19 +85,23 @@ public class CodeConverter {
 			}
 		}
 		
+		cachedAssigmentElements.addAll(elements);
+		
 		return elements;
 	}
 	
-	private CodeElement convertToForLoop(List<Flowchart> loopFlowcharts) {
+	private CodeElement convertToLoop(Flowchart loopFlowchart) {
+	
+		List<Flowchart> loopFlowcharts = getLoopFlowcharts(loopFlowchart);
 		
 		DecisionFlowchart decisionFlowchart = (DecisionFlowchart) loopFlowcharts.stream().filter(flowchart -> flowchart.getType().equals(DECISION)).findAny().get();
 		
 		String iteratorName = decisionFlowchart.getLeftVariable().getText();
 		
-		String iteratorStartValue = codeElements.stream().filter(element -> element.getCodeElementType().equals(ASSIGMENT_ELEMENT))
-				                                         .filter(element -> ((AssigmentElement) element).getVariableName().equals(iteratorName))
-				                                         .map(element -> ((AssigmentElement) element).getVariableValue())
-				                                         .findAny().get();
+		String iteratorStartValue = cachedAssigmentElements.stream().filter(element -> element.getCodeElementType().equals(ASSIGMENT_ELEMENT))
+				                                                    .filter(element -> ((AssigmentElement) element).getVariableName().equals(iteratorName))
+				                                                    .map(element -> ((AssigmentElement) element).getVariableValue())
+				                                                    .findAny().get();
 		
 		String conditionSign = decisionFlowchart.getOptions().getSelectedItem().toString();
 		String conditionValue = decisionFlowchart.getRightVariable().getText();
@@ -96,6 +109,8 @@ public class CodeConverter {
 		OperationFlowchart iteratorOperationFlowchart = (OperationFlowchart) loopFlowcharts.stream().filter(flowchart -> flowchart.getType().equals(OPERATION))
 				                                                                                    .filter(flowchart -> ((OperationFlowchart) flowchart).getAssigmentVariable().getText().equals(iteratorName))
 				                                                                                    .findAny().orElse(null);
+		
+		loopStartFlowchart = decisionFlowchart;
 		
 		if(iteratorOperationFlowchart != null) {
 			ForLoopElement forLoop = new ForLoopElement();
@@ -110,12 +125,9 @@ public class CodeConverter {
 			forLoop.setIteratorChangeSign(iteratorChangeSign);
 			forLoop.setIteratorChangeValue(iteratorChangeValue);
 			
-			loopFlowcharts.remove(decisionFlowchart);
-			loopFlowcharts.remove(iteratorOperationFlowchart);
-			
-			for(Flowchart flowchart: loopFlowcharts) {
-				convert(flowchart, forLoop.getCodeElements());
-			}
+			Flowchart nextToIteratorFlowchart = flowchartFinder.findNextFlowchart(iteratorOperationFlowchart);
+			List<CodeElement> forLoopElements = convertToCodeElements(nextToIteratorFlowchart);
+			forLoop.setCodeElements(forLoopElements);
 			
 			return forLoop;
 		}
@@ -126,14 +138,30 @@ public class CodeConverter {
 			whileLoop.setRightConditionVariable(conditionValue);
 			whileLoop.setConditionSign(conditionSign);
 			
-			loopFlowcharts.remove(decisionFlowchart);
-			
-			for(Flowchart flowchart: loopFlowcharts) {
-				convert(flowchart, whileLoop.getCodeElements());
-			}
+			Flowchart nextToDecisionFlowchart = flowchartFinder.findNextFlowchart(decisionFlowchart);
+			List<CodeElement> whileLoopElements = convertToCodeElements(nextToDecisionFlowchart);
+			whileLoop.setCodeElements(whileLoopElements);
 			
 			return whileLoop;
 		}
+	}
+	
+	private CodeElement convertToIfElseElement(Flowchart flowchart) {
+		IfElseElement ifElseElement = new IfElseElement((DecisionFlowchart)flowchart);
+		
+		Flowchart leftFlowchart = flowchartFinder.goLeft(flowchart);
+		
+		List<CodeElement> passedCodeElements = convertToCodeElements(leftFlowchart);
+		
+		ifElseElement.setPassedConditionElements(passedCodeElements);
+		
+		Flowchart rightFlowchart = flowchartFinder.goRight(flowchart);
+		
+		List<CodeElement> failedCodeElements = convertToCodeElements(rightFlowchart);
+		
+		ifElseElement.setFailedConditionElements(failedCodeElements);
+		
+		return ifElseElement;
 	}
 	
 	private CodeElement convertToOperationElement(Flowchart flowchart) {
@@ -154,10 +182,7 @@ public class CodeConverter {
 	}
 	
 	private boolean checkIfLoop(Flowchart flowchart) {
-		MatrixCoordinates coordinates = flowchart.getCoordinates();
-		int column = coordinates.getColumn();
-		int row = coordinates.getRow();
-		Flowchart nextOnRightFlowchart = flowchartFinder.check("RIGHT", row, column + 1).get();
+		Flowchart nextOnRightFlowchart = flowchartFinder.goRight(flowchart);
 		
 		while(true) {
 			
@@ -166,16 +191,14 @@ public class CodeConverter {
 				else if(nextOnRightFlowchart.equals(flowchart)) return true;
 			}
 			
-			nextOnRightFlowchart = flowchartFinder.findNextFlowchart(nextOnRightFlowchart);
+			nextOnRightFlowchart = nextOnRightFlowchart.getType().equals(DECISION) ? flowchartFinder.goLeft(nextOnRightFlowchart)
+					                                                               : flowchartFinder.findNextFlowchart(nextOnRightFlowchart);
 		}
 	}
 	
 	private List<Flowchart> getLoopFlowcharts(Flowchart flowchart) {
 		List<Flowchart> loopFlowcharts = new ArrayList<>();
-		MatrixCoordinates coordinates = flowchart.getCoordinates();
-		int column = coordinates.getColumn();
-		int row = coordinates.getRow();
-		Flowchart nextLoopFlowchart = flowchartFinder.check("RIGHT", row, column + 1).get();
+		Flowchart nextLoopFlowchart = flowchartFinder.goRight(flowchart);
 		
 		loopFlowcharts.add(flowchart);
 		

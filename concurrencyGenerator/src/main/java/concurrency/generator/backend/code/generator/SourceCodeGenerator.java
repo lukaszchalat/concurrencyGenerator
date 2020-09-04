@@ -5,6 +5,7 @@ import static concurrency.generator.backend.enums.CodeElementEnum.FOR_LOOP_ELEME
 import static concurrency.generator.backend.enums.CodeElementEnum.OPERATION_ELEMENT;
 import static concurrency.generator.backend.enums.CodeElementEnum.OUTPUT_ELEMENT;
 import static concurrency.generator.backend.enums.CodeElementEnum.WHILE_LOOP_ELEMENT;
+import static concurrency.generator.backend.enums.CodeElementEnum.IF_ELSE_ELEMENT;
 
 import java.util.List;
 
@@ -18,12 +19,16 @@ import com.squareup.javapoet.TypeSpec;
 import concurrency.generator.backend.code.AssigmentElement;
 import concurrency.generator.backend.code.CodeElement;
 import concurrency.generator.backend.code.ForLoopElement;
+import concurrency.generator.backend.code.IfElseElement;
 import concurrency.generator.backend.code.OperationElement;
 import concurrency.generator.backend.code.OutputElement;
 import concurrency.generator.backend.code.WhileLoopElement;
 
 public abstract class SourceCodeGenerator {
 	
+	protected final String JAVA_SE_EXECUTOR_STRING = "executorService.execute(task);\n";
+	protected final String JAVA_EE_EXECUTOR_STRING = "managedExecutorService.execute(task);\n";
+	protected final String SPRING_EXECUTOR_STRING = "taskExecutor.execute(task);\n";
 	protected String className;
 	
 	public SourceCodeGenerator(String className) {
@@ -50,6 +55,7 @@ public abstract class SourceCodeGenerator {
 		StringBuilder loopCode = new StringBuilder();
 		
 		loopCode.append("\tRunnable task = () -> {\n");
+		if(executor.equals(JAVA_SE_EXECUTOR_STRING)) loopCode.append("\tlock.lock();\n");
 		
 		for(CodeElement codeElement: codeElements) {
 			if(codeElement.getCodeElementType().equals(OPERATION_ELEMENT)) {
@@ -59,6 +65,8 @@ public abstract class SourceCodeGenerator {
 				loopCode.append("\t\t").append(((AssigmentElement) codeElement).toString());
 			}
 		}
+		
+		if(executor.equals(JAVA_SE_EXECUTOR_STRING)) loopCode.append("\tlock.unlock();\n");
 		
 		loopCode.append("  };\n");
 		loopCode.append(executor);
@@ -82,15 +90,20 @@ public abstract class SourceCodeGenerator {
 				ForLoopElement element = (ForLoopElement) codeElement;
 				String loopCode = generateLoopCode(element.getCodeElements(), executor);
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
+				if(executor.equals(JAVA_SE_EXECUTOR_STRING)) codeBlock.append("executorService.shutdown(); \n");
 			}
 			else if(codeElement.getCodeElementType().equals(WHILE_LOOP_ELEMENT)) {
 				WhileLoopElement element = (WhileLoopElement) codeElement;
 				String loopCode = generateLoopCode(element.getCodeElements(), executor);
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
+				if(executor.equals(JAVA_SE_EXECUTOR_STRING)) codeBlock.append("executorService.shutdown(); \n");
 			}
 			else if(codeElement.getCodeElementType().equals(OUTPUT_ELEMENT)) {
 				codeBlock.append(((OutputElement) codeElement).toString());
 			}
-		}
+			else if(codeElement.getCodeElementType().equals(IF_ELSE_ELEMENT)) {
+				codeBlock.append(((IfElseElement) codeElement).toString());
+			}
+		}	
 	}
 }

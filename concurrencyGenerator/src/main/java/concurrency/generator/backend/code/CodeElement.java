@@ -24,6 +24,10 @@ public class CodeElement {
 		return codeElements;
 	}
 	
+	public void setCodeElements(List<CodeElement> codeElements) {
+		this.codeElements = codeElements;
+	}
+
 	public void addCodeElement(CodeElement codeElement) {
 		this.codeElements.add(codeElement);
 	}

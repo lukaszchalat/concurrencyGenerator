@@ -23,7 +23,6 @@ public class JavaEESourceCodeGenerator extends SourceCodeGenerator {
 	
 	private final ClassName resource = ClassName.get("javax.annotation", "Resource");
 	private final ClassName servlet = ClassName.get("javax.servlet.http", "HttpServlet");
-	private final String JAVA_EE_EXECUTOR_STRING = "managedExecutorService.execute(task);";
 	
 	public JavaEESourceCodeGenerator(String className) {
 		super(className);

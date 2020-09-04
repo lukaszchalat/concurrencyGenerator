@@ -64,6 +64,14 @@ public class Flowchart extends JLabel {
 	public boolean isConnector() {
 		return type.equals(CONNECTOR);
 	}
+	
+	public int getColumn() {
+		return this.coordinates.getColumn();
+	}
+	
+	public int getRow() {
+		return this.coordinates.getRow();
+	}
 
 	@Override
 	public String toString() {

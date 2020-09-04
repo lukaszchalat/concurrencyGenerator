@@ -101,7 +101,15 @@ public class FlowchartFinder {
 		int column = coordinates.getColumn();
 		int row = coordinates.getRow();
 		
-		return check(LEFT_DIRECTION, row, column - 1).get();
+		return findByCoordinates(new MatrixCoordinates(row, column - 1)).get();
+	}
+	
+	public Flowchart goRight(Flowchart flowchart) {
+		MatrixCoordinates coordinates = flowchart.getCoordinates();
+		int column = coordinates.getColumn();
+		int row = coordinates.getRow();
+		
+		return findByCoordinates(new MatrixCoordinates(row, column + 1)).get();
 	}
 	
 	private Optional<Flowchart> checkTop(Flowchart flowchart) {
@@ -144,7 +152,7 @@ public class FlowchartFinder {
 		}
 	}
 
-	private Optional<Flowchart> findByCoordinates(MatrixCoordinates coordinates) {
+	public Optional<Flowchart> findByCoordinates(MatrixCoordinates coordinates) {
 		return flowcharts.stream().filter(flowchart -> flowchart.getCoordinates().equals(coordinates)).findFirst();
 	}
 }
