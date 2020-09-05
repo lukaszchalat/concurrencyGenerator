@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import concurrency.generator.frontend.enums.ConnectorEnum;
-import concurrency.generator.frontend.flowchart.Flowchart;
 import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
-import concurrency.generator.frontend.flowchart.Connector;
+import concurrency.generator.frontend.flowcharts.Connector;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class FlowchartFinder {
 

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import concurrency.generator.frontend.flowchart.Flowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class GUIUtilities {
 	

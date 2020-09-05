@@ -2,7 +2,7 @@ package concurrency.generator.frontend.flowchart.util;
 
 import static concurrency.generator.frontend.configuration.ConfigurationValues.*;
 
-import concurrency.generator.frontend.flowchart.Flowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class TransportHelper {
 	

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import concurrency.generator.frontend.flowchart.Flowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class FlowValidator {
 

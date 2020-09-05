@@ -1,6 +1,6 @@
 package concurrency.generator.frontend.flowchart.util;
 
-import concurrency.generator.frontend.flowchart.Flowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class NeighbourFlowcharts {
 	

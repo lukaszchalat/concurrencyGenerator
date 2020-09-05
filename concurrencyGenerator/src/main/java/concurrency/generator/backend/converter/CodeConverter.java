@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 import javax.swing.JTextField;
 
 import concurrency.generator.backend.code.*;
-import concurrency.generator.frontend.flowchart.AssigmentFlowchart;
-import concurrency.generator.frontend.flowchart.DecisionFlowchart;
-import concurrency.generator.frontend.flowchart.Flowchart;
-import concurrency.generator.frontend.flowchart.OperationFlowchart;
-import concurrency.generator.frontend.flowchart.OutputFlowchart;
+import concurrency.generator.frontend.flowcharts.AssigmentFlowchart;
+import concurrency.generator.frontend.flowcharts.DecisionFlowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
+import concurrency.generator.frontend.flowcharts.OperationFlowchart;
+import concurrency.generator.frontend.flowcharts.OutputFlowchart;
 
 public class CodeConverter {
 	

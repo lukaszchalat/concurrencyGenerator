@@ -5,7 +5,7 @@ import static concurrency.generator.frontend.enums.FlowchartEnum.*;
 import java.util.List;
 import java.util.Optional;
 
-import concurrency.generator.frontend.flowchart.Flowchart;
+import concurrency.generator.frontend.flowcharts.Flowchart;
 
 public class ValidationHelper {
 	

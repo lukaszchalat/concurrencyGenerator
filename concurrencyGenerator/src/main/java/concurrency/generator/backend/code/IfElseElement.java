@@ -5,7 +5,7 @@ import static concurrency.generator.backend.enums.CodeElementEnum.IF_ELSE_ELEMEN
 import java.util.ArrayList;
 import java.util.List;
 
-import concurrency.generator.frontend.flowchart.DecisionFlowchart;
+import concurrency.generator.frontend.flowcharts.DecisionFlowchart;
 
 public class IfElseElement extends CodeElement {
 	

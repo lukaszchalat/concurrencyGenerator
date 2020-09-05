@@ -1,4 +1,4 @@
-package concurrency.generator.frontend.flowchart;
+package concurrency.generator.frontend.flowcharts;
 
 import static concurrency.generator.frontend.configuration.ConfigurationValues.*;
 import static concurrency.generator.frontend.enums.FlowchartEnum.*;

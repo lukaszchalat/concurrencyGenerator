@@ -16,10 +16,10 @@ import javax.swing.JLabel;
 import concurrency.generator.frontend.enums.AlgorithmEnum;
 import concurrency.generator.frontend.enums.ConnectorEnum;
 import concurrency.generator.frontend.enums.TechnologyEnum;
-import concurrency.generator.frontend.flowchart.Flowchart;
-import concurrency.generator.frontend.flowchart.FlowchartBuilder;
 import concurrency.generator.frontend.flowchart.util.CoordinatesXY;
 import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
+import concurrency.generator.frontend.flowcharts.Flowchart;
+import concurrency.generator.frontend.flowcharts.FlowchartBuilder;
 
 public class GUICreator {
 	

@@ -1,4 +1,4 @@
-package concurrency.generator.frontend.flowchart;
+package concurrency.generator.frontend.flowcharts;
 
 import concurrency.generator.frontend.enums.ConnectorEnum;
 import concurrency.generator.frontend.enums.FlowchartEnum;

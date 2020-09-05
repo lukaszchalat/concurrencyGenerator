@@ -27,12 +27,12 @@ import concurrency.generator.backend.converter.CodeConverter;
 import concurrency.generator.frontend.algorithm.FlowchartAlgorithmStorage;
 import concurrency.generator.frontend.enums.ConnectorEnum;
 import concurrency.generator.frontend.enums.FlowchartEnum;
-import concurrency.generator.frontend.flowchart.Connector;
-import concurrency.generator.frontend.flowchart.Flowchart;
-import concurrency.generator.frontend.flowchart.FlowchartBuilder;
 import concurrency.generator.frontend.flowchart.util.CoordinatesXY;
 import concurrency.generator.frontend.flowchart.util.MatrixCoordinates;
 import concurrency.generator.frontend.flowchart.util.TransportHelper;
+import concurrency.generator.frontend.flowcharts.Connector;
+import concurrency.generator.frontend.flowcharts.Flowchart;
+import concurrency.generator.frontend.flowcharts.FlowchartBuilder;
 import concurrency.generator.frontend.validator.FlowValidator;
 
 public class GeneratorWindow extends JFrame {
