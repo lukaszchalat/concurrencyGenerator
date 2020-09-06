@@ -265,7 +265,7 @@ public class WindowGenerator extends JFrame {
 			
 			List<CodeElement> codeElements = new CodeConverter(flowchartMatrix).convertToCodeElements();
 			
-			String targetDirectory = fileChooser.getSelectedFile().getPath();
+			String targetDirectory = fileChooser.getSelectedFile() != null ? fileChooser.getSelectedFile().getPath() : "";
 			
 			try {
 				SourceCodeGeneratorController.generateSourceCode(codeElements, selectedJavaTechnology, selectedAlgorithm, targetDirectory);

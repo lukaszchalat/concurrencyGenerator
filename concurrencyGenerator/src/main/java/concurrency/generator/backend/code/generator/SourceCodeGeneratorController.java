@@ -29,7 +29,10 @@ public class SourceCodeGeneratorController {
 			throw new UnsupportedOperationException("Unsupported Java Technology " + javaTechnology);
 		}
 		
-		JavaFile javaFile = JavaFile.builder("", generatedSourceClass).build();
+		String packageName = targetDirectory.isEmpty() ? "concurrency.generator.backend.results" : "";
+		targetDirectory = targetDirectory.isEmpty() ? "./src/main/java" : targetDirectory;
+		
+		JavaFile javaFile = JavaFile.builder(packageName, generatedSourceClass).build();
 		
 		javaFile.writeTo(Paths.get(targetDirectory));
 	}

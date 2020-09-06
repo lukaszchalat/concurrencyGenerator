@@ -71,12 +71,14 @@ public abstract class SourceCodeGenerator {
 				String loopCode = generateLoopCode(element.getCodeElements());
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
 				if(executor.equals("executorService.execute(task);\n")) codeBlock.append("executorService.shutdown(); \n");
+				if(executor.equals("taskExecutor.execute(task);\n")) codeBlock.append("taskExecutor.shutdown(); \n");
 			}
 			else if(codeElement.getCodeElementType().equals(WHILE_LOOP_ELEMENT)) {
 				WhileLoopElement element = (WhileLoopElement) codeElement;
 				String loopCode = generateLoopCode(element.getCodeElements());
 				codeBlock.append(element.toString().replace("%loopCode%", loopCode));
 				if(executor.equals("executorService.execute(task);\n")) codeBlock.append("executorService.shutdown(); \n");
+				if(executor.equals("taskExecutor.execute(task);\n")) codeBlock.append("taskExecutor.shutdown(); \n");
 			}
 			else if(codeElement.getCodeElementType().equals(OUTPUT_ELEMENT)) {
 				codeBlock.append(((OutputElement) codeElement).toString());
