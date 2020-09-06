@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.lang.model.element.Modifier;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -30,6 +31,8 @@ public abstract class SourceCodeGenerator {
 	protected final String JAVA_EE_EXECUTOR_STRING = "managedExecutorService.execute(task);\n";
 	protected final String SPRING_EXECUTOR_STRING = "taskExecutor.execute(task);\n";
 	protected String className;
+	protected final ClassName lock = ClassName.get("java.util.concurrent.locks", "Lock");
+	protected final ClassName reentrantLock = ClassName.get("java.util.concurrent.locks", "ReentrantLock");
 	
 	public SourceCodeGenerator(String className) {
 		this.className = className;

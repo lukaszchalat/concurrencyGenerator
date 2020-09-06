@@ -7,9 +7,9 @@ import concurrency.generator.backend.enums.CodeElementEnum;
 
 public class CodeElement {
 	
-	private CodeElementEnum codeElementType;
+	protected CodeElementEnum codeElementType;
 	
-	private List<CodeElement> codeElements;
+	protected List<CodeElement> codeElements;
 	
 	public CodeElement(CodeElementEnum codeElementType) {
 		this.codeElementType = codeElementType;

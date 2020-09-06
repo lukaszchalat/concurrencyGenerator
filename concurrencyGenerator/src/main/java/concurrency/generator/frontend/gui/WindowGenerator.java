@@ -35,7 +35,7 @@ import concurrency.generator.frontend.flowcharts.Flowchart;
 import concurrency.generator.frontend.flowcharts.FlowchartBuilder;
 import concurrency.generator.frontend.validator.FlowValidator;
 
-public class GeneratorWindow extends JFrame {
+public class WindowGenerator extends JFrame {
 
 	/**
 	 * 
@@ -61,7 +61,7 @@ public class GeneratorWindow extends JFrame {
 	private List<Flowchart> flowcharts;
 	private MouseListener mouseListener;
 
-	public GeneratorWindow() {
+	public WindowGenerator() {
 		setWindowDimensions();
 		this.setBounds(windowWidth, windowHeight, WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setTitle("Java Concurrency Code Generator");

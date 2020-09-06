@@ -16,8 +16,6 @@ public class JavaSESourceCodeGenerator extends SourceCodeGenerator {
 	
 	private final ClassName executorService = ClassName.get("java.util.concurrent", "ExecutorService");
 	private final ClassName executors = ClassName.get("java.util.concurrent", "Executors");
-	private final ClassName lock = ClassName.get("java.util.concurrent.locks", "Lock");
-	private final ClassName reentrantLock = ClassName.get("java.util.concurrent.locks", "ReentrantLock");
 	
 	public JavaSESourceCodeGenerator(String className) {
 		super(className);

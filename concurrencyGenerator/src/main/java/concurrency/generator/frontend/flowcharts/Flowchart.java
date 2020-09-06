@@ -21,13 +21,13 @@ public class Flowchart extends JLabel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private FlowchartEnum type;
+	protected FlowchartEnum type;
 	
-	private Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+	protected Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 	
-	private MatrixCoordinates coordinates;
+	protected MatrixCoordinates matrixCoordinates;
 	
-	private CoordinatesXY coordinatesXY;
+	protected CoordinatesXY coordinatesXY;
 	
 	public Flowchart(CoordinatesXY coordinatesXY, MatrixCoordinates coordinates) {
 		this(coordinatesXY, EMPTY, coordinates);
@@ -35,7 +35,7 @@ public class Flowchart extends JLabel {
 	
 	public Flowchart(CoordinatesXY coordinatesXY, FlowchartEnum type, MatrixCoordinates coordinates) {
 		this.type = type;
-		this.coordinates = coordinates;
+		this.matrixCoordinates = coordinates;
 		this.coordinatesXY = coordinatesXY;
 		this.setBounds(coordinatesXY.getX(), coordinatesXY.getY(), FLOW_CHART_SIZE, FLOW_CHART_SIZE);
 		this.setBorder(border);
@@ -46,7 +46,7 @@ public class Flowchart extends JLabel {
 	}
 
 	public MatrixCoordinates getCoordinates() {
-		return coordinates;
+		return matrixCoordinates;
 	}	
 	
 	public CoordinatesXY getCoordinatesXY() {
@@ -66,16 +66,16 @@ public class Flowchart extends JLabel {
 	}
 	
 	public int getColumn() {
-		return this.coordinates.getColumn();
+		return this.matrixCoordinates.getColumn();
 	}
 	
 	public int getRow() {
-		return this.coordinates.getRow();
+		return this.matrixCoordinates.getRow();
 	}
 
 	@Override
 	public String toString() {
-		return "Flowchart [type=" + type + ", border=" + border + ", coordinates=" + coordinates + ", coordinatesXY="
+		return "Flowchart [type=" + type + ", border=" + border + ", coordinates=" + matrixCoordinates + ", coordinatesXY="
 				+ coordinatesXY + "]";
 	}
 }
