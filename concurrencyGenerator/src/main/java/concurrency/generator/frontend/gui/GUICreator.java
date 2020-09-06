@@ -104,7 +104,7 @@ public class GUICreator {
 		names = AlgorithmEnum.getAllNames().toArray(names);
 		JComboBox<String> algorithmDropDown = new JComboBox<String>(names);
 		
-		algorithmDropDown.setBounds(950, 250, DROPDOWN_WIDTH, DROPDOWN_HEIGHT);
+		algorithmDropDown.setBounds(950, 250, 160, DROPDOWN_HEIGHT);
 		
 		return algorithmDropDown;
 	}

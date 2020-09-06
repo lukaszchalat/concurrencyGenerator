@@ -115,7 +115,7 @@ public class FlowchartFinder {
 	private Optional<Flowchart> checkTop(Flowchart flowchart) {
 		ConnectorEnum connectorType = flowchart.isConnector() ? ((Connector) flowchart).getConnectorType() : null;
 		
-		if(connectorType.equals(TOP) || connectorType.equals(TOP_LEFT) || connectorType.equals(TOP_RIGHT)) {
+		if(connectorType.equals(TOP) || connectorType.equals(LEFT) || connectorType.equals(RIGHT)) {
 			return Optional.of(flowchart);
 		} else {
 			return Optional.empty();
@@ -125,7 +125,7 @@ public class FlowchartFinder {
 	private Optional<Flowchart> checkRight(Flowchart flowchart) {
 		ConnectorEnum connectorType = flowchart.isConnector() ? ((Connector) flowchart).getConnectorType() : null;
 		
-		if(connectorType.equals(RIGHT) || connectorType.equals(TOP_RIGHT) || connectorType.equals(BOTTOM_RIGHT)) {
+		if(connectorType.equals(RIGHT) || connectorType.equals(TOP) || connectorType.equals(BOTTOM)) {
 			return Optional.of(flowchart);
 		} else {
 			return Optional.empty();
@@ -135,7 +135,7 @@ public class FlowchartFinder {
 	private Optional<Flowchart> checkBottom(Flowchart flowchart) {
 		ConnectorEnum connectorType = flowchart.isConnector() ? ((Connector) flowchart).getConnectorType() : null;
 		
-		if(connectorType.equals(BOTTOM) || connectorType.equals(BOTTOM_RIGHT) || connectorType.equals(BOTTOM_LEFT)) {
+		if(connectorType.equals(BOTTOM) || connectorType.equals(RIGHT) || connectorType.equals(LEFT)) {
 			return Optional.of(flowchart);
 		} else {
 			return Optional.empty();
@@ -145,7 +145,7 @@ public class FlowchartFinder {
 	private Optional<Flowchart> checkLeft(Flowchart flowchart) {
 		ConnectorEnum connectorType = flowchart.isConnector() ? ((Connector) flowchart).getConnectorType() : null;
 		
-		if(connectorType.equals(LEFT) || connectorType.equals(TOP_LEFT) || connectorType.equals(BOTTOM_LEFT)) {
+		if(connectorType.equals(LEFT) || connectorType.equals(TOP) || connectorType.equals(BOTTOM)) {
 			return Optional.of(flowchart);
 		} else {
 			return Optional.empty();

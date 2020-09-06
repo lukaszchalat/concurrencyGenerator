@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 public enum AlgorithmEnum {
 	NONE(""),
 	FIBONACCI("Fibonacci"),
-	EUKLIDES("Euklides"),
+	EUKLIDES_SUBSTRACTION("Euklides with substraction"),
+	EUKLIDES_DIVISION("Euklides with division"),
 	SUM_OF_NUMBERS("Sum of numbers");
 	
 	private String name;
