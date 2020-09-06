@@ -1,6 +1,8 @@
 	package concurrency.generator.backend.code.generator;
 
-import java.util.ArrayList;
+import static concurrency.generator.backend.code.generator.ClassNameProvider.LOCK;
+import static concurrency.generator.backend.code.generator.ClassNameProvider.REENTRANTLOCK;
+
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
@@ -19,16 +21,14 @@ public class SpringSourceCodeGenerator extends SourceCodeGenerator {
 	private final ClassName autowired = ClassName.get("org.springframework.beans.factory.annotation", "Autowired");
 
 	public SpringSourceCodeGenerator(String className) {
-		super(className);
+		super(className, "taskExecutor.execute(task);\n");
 	}
 
 	@Override
 	public TypeSpec generateSourceCode(List<CodeElement> codeElements) {
 		
-		List<FieldSpec> fields = new ArrayList<>();
-		StringBuilder codeBlock = new StringBuilder();
-		
-		generateFieldsAndCodeBlock(codeElements, fields, codeBlock, SPRING_EXECUTOR_STRING);
+		List<FieldSpec> fields = getAllFields(codeElements);
+		String codeBlock = generateCodeBlock(codeElements);
 		
 		FieldSpec taskExecutorField = FieldSpec.builder(TaskExecutor.class, "taskExecutor")
 				                               .addModifiers(Modifier.PRIVATE)
@@ -41,6 +41,7 @@ public class SpringSourceCodeGenerator extends SourceCodeGenerator {
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(void.class)
                 .addParameter(String[].class, "args")
+                .addStatement("$T lock = new $T()", LOCK, REENTRANTLOCK)
                 .addCode(codeBlock.toString())
                 .build();
 		

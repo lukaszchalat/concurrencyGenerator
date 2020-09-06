@@ -1,15 +1,16 @@
 package concurrency.generator.backend.code.generator;
 
+import static concurrency.generator.backend.code.generator.ClassNameProvider.LOCK;
+import static concurrency.generator.backend.code.generator.ClassNameProvider.REENTRANTLOCK;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.lang.model.element.Modifier;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.core.task.TaskExecutor;
 
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
@@ -25,18 +26,16 @@ public class JavaEESourceCodeGenerator extends SourceCodeGenerator {
 	private final ClassName servlet = ClassName.get("javax.servlet.http", "HttpServlet");
 	
 	public JavaEESourceCodeGenerator(String className) {
-		super(className);
+		super(className, "managedExecutorService.execute(task);\n");
 	}
 
 	@Override
 	public TypeSpec generateSourceCode(List<CodeElement> codeElements) {
 		
-		List<FieldSpec> fields = new ArrayList<>();
-		StringBuilder codeBlock = new StringBuilder();
+		List<FieldSpec> fields = getAllFields(codeElements);
+		String codeBlock = generateCodeBlock(codeElements);
 		
-		generateFieldsAndCodeBlock(codeElements, fields, codeBlock, JAVA_EE_EXECUTOR_STRING);
-		
-		FieldSpec managedExecutorServiceField = FieldSpec.builder(TaskExecutor.class, "taskExecutor")
+		FieldSpec managedExecutorServiceField = FieldSpec.builder(ManagedExecutorService.class, "managedExecutorService")
 				                                         .addModifiers(Modifier.PRIVATE)
 				                                         .addAnnotation(AnnotationSpec.builder(resource).addMember("name", "DefaultManagedExecutorService").build())
 				                                         .build();
@@ -50,6 +49,7 @@ public class JavaEESourceCodeGenerator extends SourceCodeGenerator {
                 .addParameter(HttpServletResponse.class, "response")
                 .addException(ServletException.class)
                 .addException(IOException.class)
+                .addStatement("$T lock = new $T()", LOCK, REENTRANTLOCK)
                 .addCode(codeBlock.toString())
                 .build();
 		

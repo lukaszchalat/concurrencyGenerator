@@ -2,6 +2,10 @@ package concurrency.generator.backend.code;
 
 import static concurrency.generator.backend.enums.CodeElementEnum.ASSIGMENT_ELEMENT;
 
+import javax.lang.model.element.Modifier;
+
+import com.squareup.javapoet.FieldSpec;
+
 public class AssigmentElement extends CodeElement {
 	
 	private String variableName;
@@ -29,5 +33,11 @@ public class AssigmentElement extends CodeElement {
 		         .append(variableValue + ";\n");
 		
 		return assigment.toString();
+	}
+	
+	public FieldSpec getAsField() {
+		return FieldSpec.builder(Integer.class, variableName)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE, Modifier.STATIC)
+                        .build();
 	}
 }

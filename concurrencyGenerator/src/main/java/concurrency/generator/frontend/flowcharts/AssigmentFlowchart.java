@@ -4,6 +4,7 @@ import static concurrency.generator.frontend.configuration.ConfigurationValues.*
 import static concurrency.generator.frontend.enums.FlowchartEnum.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -29,7 +30,7 @@ public class AssigmentFlowchart extends Flowchart {
 		this.setHorizontalAlignment(JLabel.CENTER);
 		this.setVerticalAlignment(JLabel.TOP);
 		
-		assigmentMapping = new HashMap<>();
+		assigmentMapping = new LinkedHashMap<>();
 		
 		JTextField variableName, variableValue;
 		JLabel equalitySign;

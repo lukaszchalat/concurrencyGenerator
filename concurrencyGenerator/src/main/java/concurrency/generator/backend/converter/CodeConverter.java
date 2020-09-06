@@ -3,6 +3,7 @@ package concurrency.generator.backend.converter;
 import static concurrency.generator.frontend.enums.FlowchartEnum.*;
 import static concurrency.generator.backend.enums.CodeElementEnum.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,13 +76,13 @@ public class CodeConverter {
 	}
 	
 	private List<CodeElement> convertToAssigmentElements(Flowchart flowchart) {
-		List<CodeElement> elements = new ArrayList<>();
+		LinkedList<CodeElement> elements = new LinkedList<>();
 
 		for(Map.Entry<JTextField, JTextField> entry: ((AssigmentFlowchart) flowchart).getAssigmentMapping().entrySet()) {
 			String name = entry.getKey().getText();
 			String value = entry.getValue().getText();
 			if(name != null && !name.isEmpty() && value != null && !value.isEmpty()) {
-				elements.add(new AssigmentElement(name, value));
+				elements.addLast(new AssigmentElement(name, value));
 			}
 		}
 		
@@ -111,6 +112,7 @@ public class CodeConverter {
 				                                                                                    .findAny().orElse(null);
 		
 		loopStartFlowchart = decisionFlowchart;
+		Flowchart nextToDecisionFlowchart = flowchartFinder.findNextFlowchart(decisionFlowchart);
 		
 		if(iteratorOperationFlowchart != null) {
 			ForLoopElement forLoop = new ForLoopElement();
@@ -125,8 +127,7 @@ public class CodeConverter {
 			forLoop.setIteratorChangeSign(iteratorChangeSign);
 			forLoop.setIteratorChangeValue(iteratorChangeValue);
 			
-			Flowchart nextToIteratorFlowchart = flowchartFinder.findNextFlowchart(iteratorOperationFlowchart);
-			List<CodeElement> forLoopElements = convertToCodeElements(nextToIteratorFlowchart);
+			List<CodeElement> forLoopElements = convertToCodeElements(nextToDecisionFlowchart);
 			forLoop.setCodeElements(forLoopElements);
 			
 			return forLoop;
@@ -138,7 +139,6 @@ public class CodeConverter {
 			whileLoop.setRightConditionVariable(conditionValue);
 			whileLoop.setConditionSign(conditionSign);
 			
-			Flowchart nextToDecisionFlowchart = flowchartFinder.findNextFlowchart(decisionFlowchart);
 			List<CodeElement> whileLoopElements = convertToCodeElements(nextToDecisionFlowchart);
 			whileLoop.setCodeElements(whileLoopElements);
 			
